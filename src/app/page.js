@@ -1,13 +1,13 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import ProductGrid from '../components/ProductGrid';
 import Sidebar from '../components/Sidebar';
 import SearchBar from '../components/SearchBar';
 import { products } from '../data/product';
 
-export default function Home() {
+function HomeContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   
@@ -126,7 +126,7 @@ export default function Home() {
             <h1 className="text-2xl font-bold text-gray-800">Product Listing</h1>
             <div className="text-gray-600">
               {filteredProducts.length} product{filteredProducts.length !== 1 ? 's' : ''} found
-              {searchQuery && <span className="ml-2">for "{searchQuery}"</span>}
+              {searchQuery && <span className="ml-2">for &quot;{searchQuery}&quot;</span>}
             </div>
           </div>
           
@@ -141,5 +141,17 @@ export default function Home() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function Home() {
+  return (
+    <Suspense fallback={
+      <div className="flex justify-center items-center min-h-64">
+        <div className="text-gray-600">Loading products...</div>
+      </div>
+    }>
+      <HomeContent />
+    </Suspense>
   );
 }

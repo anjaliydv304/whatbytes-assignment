@@ -1,20 +1,19 @@
 'use client';
 
-import { useState, useContext, use } from 'react';
+import { useState, useContext, Suspense } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { Star, Minus, Plus, ArrowLeft } from 'lucide-react';
 import { CartContext } from '../../../context/CartContext';
 import { products } from '../../../data/product';
 
-export default function ProductDetail({ params }) {
+function ProductDetailContent({ params }) {
   const router = useRouter();
   const { addToCart } = useContext(CartContext);
   const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState(0);
 
-  const resolvedParams = use(params);
-  const product = products.find(p => p.id === parseInt(resolvedParams.id));
+  const product = products.find(p => p.id === parseInt(params.id));
   
   if (!product) {
     return (
@@ -153,5 +152,13 @@ export default function ProductDetail({ params }) {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function ProductDetail({ params }) {
+  return (
+    <Suspense fallback={<div className="text-center py-16">Loading product...</div>}>
+      <ProductDetailContent params={params} />
+    </Suspense>
   );
 }

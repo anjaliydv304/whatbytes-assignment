@@ -1,11 +1,11 @@
 'use client';
 
-import { useContext } from 'react';
+import { useContext, Suspense } from 'react';
 import { CartContext } from '../../context/CartContext';
 import { Trash2, Plus, Minus } from 'lucide-react';
 import Image from 'next/image';
 
-export default function Cart() {
+function CartContent() {
   const { cart, updateQuantity, removeFromCart, getCartTotal, clearCart } = useContext(CartContext);
 
   if (cart.length === 0) {
@@ -87,5 +87,17 @@ export default function Cart() {
         </button>
       </div>
     </div>
+  );
+}
+
+export default function Cart() {
+  return (
+    <Suspense fallback={
+      <div className="flex justify-center items-center min-h-64">
+        <div className="text-gray-600">Loading cart...</div>
+      </div>
+    }>
+      <CartContent />
+    </Suspense>
   );
 }
