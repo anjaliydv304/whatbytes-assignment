@@ -1,19 +1,20 @@
 'use client';
 
-import { useState, useContext } from 'react';
+import { useState, useContext, use } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { Star, Minus, Plus, ArrowLeft } from 'lucide-react';
 import { CartContext } from '../../../context/CartContext';
-import { products } from '../../../data/products';
+import { products } from '../../../data/product';
 
 export default function ProductDetail({ params }) {
   const router = useRouter();
   const { addToCart } = useContext(CartContext);
   const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState(0);
-  
-  const product = products.find(p => p.id === parseInt(params.id));
+
+  const resolvedParams = use(params);
+  const product = products.find(p => p.id === parseInt(resolvedParams.id));
   
   if (!product) {
     return (
@@ -21,7 +22,7 @@ export default function ProductDetail({ params }) {
         <h1 className="text-2xl font-bold text-gray-800">Product Not Found</h1>
         <button 
           onClick={() => router.back()}
-          className="mt-4 text-blue-600 hover:text-blue-800"
+          className="mt-4 text-[#0859A8] hover:text-blue-900"
         >
           Go Back
         </button>
@@ -31,7 +32,6 @@ export default function ProductDetail({ params }) {
 
   const handleAddToCart = () => {
     addToCart(product, quantity);
-   
   };
 
   const renderStars = (rating) => {
@@ -59,7 +59,7 @@ export default function ProductDetail({ params }) {
     <div className="max-w-6xl mx-auto px-4 py-8">
       <button 
         onClick={() => router.back()}
-        className="flex items-center text-blue-600 hover:text-blue-800 mb-6"
+        className="flex items-center text-[#0859A8] hover:text-blue-800 cursor-pointer  mb-6"
       >
         <ArrowLeft size={20} className="mr-2" />
         Back to Products
@@ -107,7 +107,7 @@ export default function ProductDetail({ params }) {
             </div>
           </div>
 
-          <div className="text-4xl font-bold text-blue-600">
+          <div className="text-4xl font-bold text-[#0859A8]">
             ${product.price.toFixed(2)}
           </div>
 
@@ -146,7 +146,7 @@ export default function ProductDetail({ params }) {
 
           <button
             onClick={handleAddToCart}
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 px-6 rounded-lg text-lg transition duration-200"
+            className="w-full bg-[#0859A8] hover:bg-blue-900 text-white font-bold py-4 px-6 rounded-lg text-lg transition duration-200"
           >
             Add to Cart - ${(product.price * quantity).toFixed(2)}
           </button>

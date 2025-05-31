@@ -6,28 +6,26 @@ export const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [isHydrated, setIsHydrated] = useState(false);
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const storedCart = localStorage.getItem('whatbytes-cart');
-      if (storedCart) {
-        try {
-          setCart(JSON.parse(storedCart));
-        } catch (error) {
-          console.error('Error parsing cart from localStorage:', error);
-          localStorage.removeItem('whatbytes-cart');
-        }
+    const storedCart = localStorage.getItem('whatbytes-cart');
+    if (storedCart) {
+      try {
+        setCart(JSON.parse(storedCart));
+      } catch (error) {
+        console.error('Error parsing cart from localStorage:', error);
+        localStorage.removeItem('whatbytes-cart');
       }
-      setIsLoaded(true);
     }
+    setIsHydrated(true);
   }, []);
 
   useEffect(() => {
-    if (isLoaded && typeof window !== 'undefined') {
+    if (isHydrated) {
       localStorage.setItem('whatbytes-cart', JSON.stringify(cart));
     }
-  }, [cart, isLoaded]);
+  }, [cart, isHydrated]);
 
   const addToCart = (product, quantity) => {
     setCart(prevCart => {
@@ -61,7 +59,7 @@ export const CartProvider = ({ children }) => {
 
   const clearCart = () => {
     setCart([]);
-    if (typeof window !== 'undefined') {
+    if (isHydrated) {
       localStorage.removeItem('whatbytes-cart');
     }
   };
@@ -79,7 +77,7 @@ export const CartProvider = ({ children }) => {
         removeFromCart,
         clearCart,
         getCartTotal,
-        isLoaded,
+        isHydrated, 
       }}
     >
       {children}

@@ -3,7 +3,7 @@ export const products = [
     id: 1,
     name: "Running Shoes",
     price: 99,
-    category: "Electronics",
+    category: "Clothing",
     brand: "Nike",
     image: "/images/running-shoes.jpg",
     rating: 4.5,
