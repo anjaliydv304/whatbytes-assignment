@@ -1,32 +1,65 @@
+'use client';
+
 import Link from 'next/link';
-import { Search, ShoppingCart, UserCircle } from 'lucide-react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { ShoppingCart, UserCircle } from 'lucide-react';
+import { useContext } from 'react';
+import { CartContext } from '../context/CartContext';
+import SearchBar from './SearchBar';
 
 const Header = () => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const { cart } = useContext(CartContext); 
+  const itemCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+
+  const handleSearch = (query) => {
+    const params = new URLSearchParams(searchParams);
+    
+    if (query.trim()) {
+      params.set('search', query.trim());
+    } else {
+      params.delete('search');
+    }
+    
+    const newURL = params.toString() ? `/?${params.toString()}` : '/';
+    router.push(newURL);
+  };
+
+  const currentSearch = searchParams.get('search') || '';
+
   return (
-    <header className="bg-blue-700 text-white shadow-md">
-      <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-        <Link href="/" className="text-2xl font-bold">
-          Logo
-        </Link>
-
-        <div className="relative flex-grow max-w-xl mx-4">
-          <input
-            type="search"
-            placeholder="Search for products..."
-            className="w-full p-2 pl-10 rounded-md text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-300"
-          />
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
-        </div>
-
-        <div className="flex items-center space-x-4">
-          <Link href="/cart" className="relative flex items-center hover:text-gray-300">
-            <ShoppingCart size={24} />
-            <span className="ml-1">Cart</span>
+    <header className="bg-[#0859A8] text-white shadow-md"> 
+      <div className="container mx-auto px-4 py-4">
+        <div className="flex justify-between items-center">
+          <Link href="/" className="text-2xl font-bold">
+            Logo
           </Link>
 
-          <button className="flex items-center hover:text-gray-300">
-            <UserCircle size={24} />
+          <div className="hidden md:block flex-grow mx-8">
+            <SearchBar 
+              onSearch={handleSearch} 
+              initialValue={currentSearch}
+              placeholder="Search for products..."
+            />
+          </div>
+
+          <div className="flex items-center space-x-4">
+          <button className=''>
+            <Link href="/cart" className="relative flex items-center hover:text-gray-300 transition-colors">
+              <ShoppingCart size={24} />
+              <span className="ml-2 hidden sm:inline">Cart</span>
+              {itemCount > 0 && (
+                <span className="absolute -top-2 -right-2 bg-red-500 text-xs text-white rounded-full h-5 w-5 flex items-center justify-center font-bold">
+                  {itemCount > 99 ? '99+' : itemCount}
+                </span>
+              )}
+            </Link>
           </button>
+            
+            
+           
+          </div>
         </div>
       </div>
     </header>

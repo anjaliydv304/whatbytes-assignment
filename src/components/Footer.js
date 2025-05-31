@@ -2,11 +2,11 @@ import { Facebook, Instagram, Twitter } from 'lucide-react';
 
 const Footer = () => {
   return (
-    <footer className="bg-blue-700 text-gray-200 py-8"> 
+    <footer className="bg-[#002C5F] text-gray-200 py-8"> 
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
           <div>
-            <h3 className="text-lg font-semibold mb-2">Filters (Placeholder)</h3>
+            <h3 className="text-lg font-semibold mb-2">Filters </h3>
             <ul className="space-y-1">
               <li><a href="#" className="hover:text-white">All</a></li>
               <li><a href="#" className="hover:text-white">Electronic</a></li>
@@ -29,8 +29,8 @@ const Footer = () => {
             </div>
           </div>
         </div>
-        <div className="text-center mt-8 pt-8 border-t border-blue-600">
-          <p>&copy; {new Date().getFullYear()} American Whatbytes. All rights reserved.</p>
+        <div className="text-center mt-8 pt-8 ">
+          <p>&copy; 2024 American</p>
         </div>
       </div>
     </footer>
